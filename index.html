@@ -922,6 +922,7 @@ function questionPairHTML(qi) {
 }
 
 function fmtFrac(text) {
+  text = text.replace(/ \/ /g, ' \u00f7 ');
   return text.replace(/(\d+)\/(\d+)/g,
     '<span class="frac"><span class="frac-num">$1</span><span class="frac-den">$2</span></span>');
 }
@@ -1139,6 +1140,53 @@ function toggleOpt(el, key) {
 /* ==========================================================
    PDF GENERATION
    ========================================================== */
+
+/* Draw a single line of text with inline stacked fractions in PDF */
+function pdfDrawLineWithFracs(doc, line, x, y, color) {
+  var parts = line.split(/(\d+\/\d+)/g);
+  var curX = x;
+  var baseFontSize = doc.getFontSize();
+  for (var i = 0; i < parts.length; i++) {
+    var part = parts[i];
+    if (!part) continue;
+    var m = part.match(/^(\d+)\/(\d+)$/);
+    if (m) {
+      var num = m[1], den = m[2];
+      var fracSize = baseFontSize * 0.65;
+      doc.setFontSize(fracSize);
+      var numW = doc.getTextWidth(num);
+      var denW = doc.getTextWidth(den);
+      var fracW = Math.max(numW, denW) + 1.5;
+      var cx = curX + fracW / 2;
+      doc.text(num, cx, y - 1.4, {align:'center'});
+      doc.setDrawColor(color[0], color[1], color[2]);
+      doc.setLineWidth(0.25);
+      doc.line(curX + 0.2, y - 0.4, curX + fracW - 0.2, y - 0.4);
+      doc.text(den, cx, y + 1.2, {align:'center'});
+      doc.setFontSize(baseFontSize);
+      curX += fracW + 0.5;
+    } else {
+      doc.text(part, curX, y);
+      curX += doc.getTextWidth(part);
+    }
+  }
+}
+
+/* Render wrapped text with inline fractions and ÷ sign */
+function pdfDrawTextWithFracs(doc, text, x, y, maxWidth, lineSpacing, color) {
+  var fmtText = text.replace(/ \/ /g, ' \u00f7 ');
+  var lines = doc.splitTextToSize(fmtText, maxWidth);
+  for (var i = 0; i < lines.length; i++) {
+    if (/\d+\/\d+/.test(lines[i])) {
+      pdfDrawLineWithFracs(doc, lines[i], x, y, color);
+    } else {
+      doc.text(lines[i], x, y);
+    }
+    y += lineSpacing;
+  }
+  return {y: y, lineCount: lines.length};
+}
+
 function generatePDF() {
   var ind = document.getElementById('genInd');
   var btn = document.getElementById('genBtn');
@@ -1272,13 +1320,12 @@ function drawQ(doc, num, text, y, M, CW) {
   doc.setFont('helvetica', 'bold');
   doc.text(String(num), M + 5, y + 1, {align: 'center'});
 
-  // Text
+  // Text with fraction and ÷ support
   doc.setTextColor(44, 62, 80);
   doc.setFontSize(10.5);
   doc.setFont('helvetica', 'normal');
-  var lines = doc.splitTextToSize(text, CW - 16);
-  doc.text(lines, M + 12, y + 1);
-  y += lines.length * 5 + 4;
+  var res = pdfDrawTextWithFracs(doc, text, M + 12, y + 1, CW - 16, 5, [44, 62, 80]);
+  y += res.lineCount * 5 + 4;
 
   // Answer line
   doc.setFontSize(9);
@@ -1297,10 +1344,16 @@ function drawAnsKey(doc, num, q, y, M, CW, H) {
   doc.text('Q' + num + '. ' + q.title, M, y);
   y += 5.5;
 
+  // Answer line with fraction support
   doc.setFontSize(10);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(39, 174, 96);
-  doc.text('Answer: ' + ansText, M + 4, y);
+  var fmtAns = 'Answer: ' + ansText;
+  if (/\d+\/\d+/.test(fmtAns)) {
+    pdfDrawLineWithFracs(doc, fmtAns, M + 4, y, [39, 174, 96]);
+  } else {
+    doc.text(fmtAns, M + 4, y);
+  }
   y += 5;
 
   doc.setFont('helvetica', 'normal');
@@ -1309,9 +1362,9 @@ function drawAnsKey(doc, num, q, y, M, CW, H) {
 
   for (var j = 0; j < q.steps.length; j++) {
     if (y > H - 15) { doc.addPage(); y = M + 5; }
-    var sl = doc.splitTextToSize('Step ' + (j + 1) + ': ' + q.steps[j], CW - 10);
-    doc.text(sl, M + 4, y);
-    y += sl.length * 4.2 + 1;
+    var stepText = 'Step ' + (j + 1) + ': ' + q.steps[j];
+    var res = pdfDrawTextWithFracs(doc, stepText, M + 4, y, CW - 10, 4.2, [44, 62, 80]);
+    y += res.lineCount * 4.2 + 1;
   }
 
   // Separator
