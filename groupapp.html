@@ -1159,25 +1159,27 @@ function generatePDF() {
       doc.text('Date: ________________________________', M, 160);
       doc.text('Score: _________ / 19', M, 175);
 
-      // ===== ALTERNATE QUESTIONS =====
+      // ===== ALTERNATE QUESTIONS (2 per page) =====
       if (state.exportOpts.altQ) {
         doc.addPage();
         y = sectionHeader(doc, 'Practice Questions (Alternate)', M, W);
 
         for (var i = 0; i < ALT.length; i++) {
-          if (y > H - 55) { doc.addPage(); y = M + 5; }
+          if (i > 0 && i % 2 === 0) { doc.addPage(); y = M + 5; }
           y = drawQ(doc, i + 1, ALT[i].text, y, M, CW);
+          if (i % 2 === 0 && i + 1 < ALT.length) { y = Math.max(y, H / 2); }
         }
       }
 
-      // ===== ORIGINAL QUESTIONS =====
+      // ===== ORIGINAL QUESTIONS (2 per page) =====
       if (state.exportOpts.origQ) {
         doc.addPage();
         y = sectionHeader(doc, 'Original Questions', M, W);
 
         for (var i = 0; i < ORIG.length; i++) {
-          if (y > H - 55) { doc.addPage(); y = M + 5; }
+          if (i > 0 && i % 2 === 0) { doc.addPage(); y = M + 5; }
           y = drawQ(doc, i + 1, ORIG[i].text, y, M, CW);
+          if (i % 2 === 0 && i + 1 < ORIG.length) { y = Math.max(y, H / 2); }
         }
       }
 
