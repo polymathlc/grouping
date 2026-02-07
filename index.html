@@ -298,6 +298,26 @@ body {
   text-underline-offset: 3px;
 }
 
+/* ===== STACKED FRACTIONS ===== */
+.frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: middle;
+  line-height: 1.15;
+  margin: 0 3px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85em;
+}
+.frac-num {
+  border-bottom: 2px solid currentColor;
+  padding: 0 4px 2px;
+}
+.frac-den {
+  padding: 2px 4px 0;
+}
+
 /* ===== ANSWER INPUT ===== */
 .answer-section {
   display: flex; align-items: center; gap: 10px;
@@ -901,6 +921,11 @@ function questionPairHTML(qi) {
   return html;
 }
 
+function fmtFrac(text) {
+  return text.replace(/(\d+)\/(\d+)/g,
+    '<span class="frac"><span class="frac-num">$1</span><span class="frac-den">$2</span></span>');
+}
+
 function questionCardHTML(q, qi, prefix, numCls, tagCls, tagLabel) {
   var label = prefix === 'orig' ? 'Q' + q.n : 'A' + q.n;
   var boxCls = prefix === 'alt' ? ' alt-box' : '';
@@ -913,7 +938,7 @@ function questionCardHTML(q, qi, prefix, numCls, tagCls, tagLabel) {
     '<div class="q-title-area"><h2>' + q.title + '</h2>' +
     '<span class="q-type ' + tagCls + '">' + tagLabel + '</span></div></div>';
 
-  h += '<div class="problem-box' + boxCls + '" data-icon="' + icon + '">' + q.text + '</div>';
+  h += '<div class="problem-box' + boxCls + '" data-icon="' + icon + '">' + fmtFrac(q.text) + '</div>';
 
   // Visualization for some questions
   h += buildViz(q, qi, prefix);
@@ -928,12 +953,12 @@ function questionCardHTML(q, qi, prefix, numCls, tagCls, tagLabel) {
   for (var i = 0; i < nSteps; i++) {
     var sc = 's' + ((i % 5) + 1);
     h += '<div class="sol-step ' + sc + '" id="step-' + prefix + '-' + qi + '-' + i + '">' +
-      '<span class="step-num">' + (i + 1) + '</span> ' + q.steps[i] + '</div>';
+      '<span class="step-num">' + (i + 1) + '</span> ' + fmtFrac(q.steps[i]) + '</div>';
   }
   h += '</div>';
 
   h += '<div class="final-answer" id="answer-' + prefix + '-' + qi + '">' +
-    '&#9989; Answer: <span style="font-size:22px;color:var(--magenta);display:block;margin-top:3px;">' + ansText + '</span></div>';
+    '&#9989; Answer: <span style="font-size:22px;color:var(--magenta);display:block;margin-top:3px;">' + fmtFrac(ansText) + '</span></div>';
   h += '</div>';
 
   // Answer input
