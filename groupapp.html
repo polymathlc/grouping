@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P5 Math — Grouping Concept | Polymath Learning Centre</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
+<style>
+:root {
+  --teal: #00b4d8;
+  --teal-dark: #0096b7;
+  --teal-light: #90e0ef;
+  --teal-bg: #e8f8fb;
+  --magenta: #e6007e;
+  --magenta-dark: #c20069;
+  --magenta-light: #ff5cb0;
+  --magenta-bg: #fde8f2;
+  --purple: #7b2d8e;
+  --purple-light: #c084d8;
+  --gold: #f9a825;
+  --gold-light: #ffe082;
+  --green: #2ecc71;
+  --green-dark: #27ae60;
+  --red: #e74c3c;
+  --bg: #f5f7fa;
+  --card: #ffffff;
+  --text: #2c3e50;
+  --text-light: #7f8c8d;
+  --shadow: 0 4px 24px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--teal); border-radius: 4px; }
+
+/* ===== HEADER ===== */
+.header {
+  background: linear-gradient(135deg, var(--magenta) 0%, var(--purple) 50%, var(--teal-dark) 100%);
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+.header-inner {
+  max-width: 1200px; margin: 0 auto; padding: 14px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.logo-area { display: flex; align-items: center; gap: 14px; }
+.logo-icon {
+  width: 42px; height: 42px; background: white; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 900; color: var(--magenta);
+  font-family: 'Fredoka', sans-serif;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.logo-text { color: white; font-family: 'Fredoka', sans-serif; }
+.logo-text h1 { font-size: 18px; font-weight: 700; line-height: 1.1; letter-spacing: 0.5px; }
+.logo-text span { font-size: 10px; opacity: 0.85; letter-spacing: 2px; text-transform: uppercase; }
+.header-actions { display: flex; align-items: center; gap: 10px; }
+.header-badge {
+  background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);
+  padding: 7px 16px; border-radius: 30px; color: white;
+  font-size: 12px; font-weight: 700; border: 1px solid rgba(255,255,255,0.3);
+}
+.export-btn {
+  background: white; color: var(--magenta); border: none;
+  padding: 8px 18px; border-radius: 30px; font-family: 'Nunito', sans-serif;
+  font-size: 13px; font-weight: 800; cursor: pointer;
+  display: flex; align-items: center; gap: 6px;
+  transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.export-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,0.2); }
+.progress-bar-container { background: rgba(255,255,255,0.15); height: 4px; }
+.progress-bar-fill {
+  height: 100%; background: var(--gold); width: 0%;
+  transition: width 0.5s ease; border-radius: 0 2px 2px 0;
+}
+
+/* ===== LAYOUT ===== */
+.layout { display: flex; max-width: 1400px; margin: 0 auto; min-height: calc(100vh - 80px); }
+.sidebar {
+  width: 280px; background: white; border-right: 1px solid #e8ecf0;
+  padding: 16px 0; position: sticky; top: 76px;
+  height: calc(100vh - 76px); overflow-y: auto; flex-shrink: 0;
+}
+.sidebar-title {
+  font-family: 'Fredoka', sans-serif; font-size: 12px; color: var(--text-light);
+  text-transform: uppercase; letter-spacing: 1.5px; padding: 8px 20px; margin-bottom: 2px;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 18px; cursor: pointer; transition: all 0.2s;
+  border-left: 3px solid transparent; font-size: 13px; font-weight: 600; color: var(--text);
+}
+.nav-item:hover { background: var(--teal-bg); border-left-color: var(--teal); }
+.nav-item.active {
+  background: linear-gradient(90deg, var(--teal-bg), transparent);
+  border-left-color: var(--magenta); color: var(--magenta);
+}
+.nav-item .nav-num {
+  width: 26px; height: 26px; border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 800; background: #f0f2f5;
+  color: var(--text-light); flex-shrink: 0;
+}
+.nav-item.active .nav-num { background: var(--magenta); color: white; }
+.nav-item.completed .nav-num { background: var(--green); color: white; }
+.nav-item .nav-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nav-section { margin-top: 12px; }
+.main-content { flex: 1; padding: 24px 32px; max-width: calc(1400px - 280px); overflow-y: auto; }
+
+/* ===== CARD ===== */
+.question-page { display: none; animation: fadeSlideIn 0.35s ease; }
+.question-page.active { display: block; }
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.q-card {
+  background: white; border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 28px; margin-bottom: 20px;
+}
+.q-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+.q-number {
+  width: 50px; height: 50px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Fredoka', sans-serif; font-size: 20px;
+  font-weight: 700; color: white; flex-shrink: 0;
+}
+.q-number.practice { background: linear-gradient(135deg, var(--magenta), var(--magenta-dark)); }
+.q-number.alt { background: linear-gradient(135deg, var(--gold), #e68a00); }
+.q-title-area h2 { font-family: 'Fredoka', sans-serif; font-size: 18px; color: var(--text); line-height: 1.3; }
+.q-type {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; padding: 2px 10px; border-radius: 6px;
+  display: inline-block; margin-top: 3px;
+}
+.q-type.grouping { background: var(--teal-bg); color: var(--teal-dark); }
+.q-type.excess { background: #f3e5f5; color: var(--purple); }
+.q-type.promo { background: var(--gold-light); color: #e65100; }
+.q-type.alt-tag { background: #fff3e0; color: #e65100; }
+
+/* ===== PROBLEM BOX ===== */
+.problem-box {
+  background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+  border: 2px solid #d8e0ff; border-radius: var(--radius-sm);
+  padding: 18px 22px; margin-bottom: 20px;
+  font-size: 15px; line-height: 1.75; position: relative;
+}
+.problem-box::before {
+  content: attr(data-icon); position: absolute; top: -12px; left: 14px;
+  background: white; padding: 2px 6px; border-radius: 6px; font-size: 16px;
+}
+.problem-box.alt-box {
+  background: linear-gradient(135deg, #fff8e1 0%, #fff3e0 100%);
+  border-color: #ffe0b2;
+}
+.hl { background: var(--gold-light); padding: 1px 6px; border-radius: 4px; font-weight: 700; }
+.vl { color: var(--magenta); font-weight: 800; font-family: 'JetBrains Mono', monospace; }
+
+/* ===== VISUALIZATION ===== */
+.viz-area {
+  background: white; border: 2px solid #eef1f5; border-radius: var(--radius);
+  padding: 20px; margin-bottom: 20px; min-height: 100px; overflow: hidden;
+}
+.viz-title {
+  font-family: 'Fredoka', sans-serif; font-size: 15px;
+  color: var(--teal-dark); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.groups-container {
+  display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; padding: 12px;
+}
+.group-box {
+  border: 2px dashed var(--teal); border-radius: 10px;
+  padding: 8px; display: flex; flex-direction: column;
+  gap: 3px; align-items: center; background: var(--teal-bg);
+  min-width: 56px; animation: groupPop 0.3s ease backwards; position: relative;
+}
+.group-box .group-label {
+  position: absolute; top: -9px; font-size: 9px; font-weight: 800;
+  background: var(--teal); color: white; padding: 1px 7px; border-radius: 10px;
+}
+@keyframes groupPop {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.item-chip {
+  padding: 3px 8px; border-radius: 5px; font-size: 11px;
+  font-weight: 700; font-family: 'JetBrains Mono', monospace;
+  color: white; min-width: 44px; text-align: center;
+}
+.item-chip.type-a { background: var(--magenta); }
+.item-chip.type-b { background: var(--teal-dark); }
+.group-value-tag {
+  background: var(--magenta); color: white;
+  padding: 3px 10px; border-radius: 16px;
+  font-size: 12px; font-weight: 800;
+  font-family: 'JetBrains Mono', monospace;
+  display: inline-block; margin-top: 4px;
+}
+
+/* ===== BAR VIZ ===== */
+.bar-viz { display: flex; flex-direction: column; gap: 10px; padding: 12px; }
+.bar-row { display: flex; align-items: center; gap: 10px; }
+.bar-label { font-size: 12px; font-weight: 700; width: 110px; text-align: right; flex-shrink: 0; }
+.bar-track { flex: 1; height: 32px; background: #f0f2f5; border-radius: 7px; overflow: hidden; }
+.bar-fill {
+  height: 100%; border-radius: 7px; display: flex; align-items: center; padding: 0 10px;
+  font-size: 11px; font-weight: 700; color: white;
+  font-family: 'JetBrains Mono', monospace; transition: width 1s ease;
+}
+.bar-fill.type-a { background: linear-gradient(90deg, var(--magenta), var(--magenta-light)); }
+.bar-fill.type-b { background: linear-gradient(90deg, var(--teal-dark), var(--teal)); }
+.bar-fill.total-bar { background: linear-gradient(90deg, var(--gold), #ffc107); color: var(--text); }
+
+/* ===== SLIDER ===== */
+.slider-control { display: flex; align-items: center; gap: 10px; justify-content: center; }
+.slider-control label { font-size: 12px; font-weight: 700; color: var(--text-light); }
+.slider-control input[type="range"] {
+  appearance: none; -webkit-appearance: none; width: 180px; height: 6px;
+  background: #e0e4e8; border-radius: 3px; outline: none;
+}
+.slider-control input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none; width: 18px; height: 18px;
+  background: var(--magenta); border-radius: 50%; cursor: pointer;
+  box-shadow: 0 2px 6px rgba(230,0,126,0.3);
+}
+.slider-value {
+  font-family: 'JetBrains Mono', monospace; font-weight: 700;
+  font-size: 15px; color: var(--magenta); min-width: 36px;
+}
+
+/* ===== STEPS ===== */
+.steps-area { margin-top: 14px; }
+.step-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 9px 20px; border: none; border-radius: 28px;
+  font-family: 'Nunito', sans-serif; font-size: 13px;
+  font-weight: 700; cursor: pointer; transition: all 0.2s; margin: 3px;
+}
+.step-btn.primary {
+  background: linear-gradient(135deg, var(--magenta), var(--magenta-dark));
+  color: white; box-shadow: 0 3px 10px rgba(230,0,126,0.3);
+}
+.step-btn.primary:hover { transform: translateY(-2px); }
+.step-btn.secondary { background: var(--teal-bg); color: var(--teal-dark); border: 2px solid var(--teal); }
+.step-btn.secondary:hover { background: var(--teal); color: white; }
+.step-btn.reset { background: #f5f5f5; color: var(--text-light); }
+.solution-steps { margin-top: 16px; }
+.sol-step {
+  display: none; padding: 14px 18px; margin-bottom: 10px;
+  border-radius: var(--radius-sm); border-left: 4px solid;
+  animation: stepReveal 0.35s ease; line-height: 1.7; font-size: 14px;
+}
+.sol-step.visible { display: block; }
+@keyframes stepReveal {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.sol-step.s1 { background: #e8f5e9; border-color: var(--green); }
+.sol-step.s2 { background: #fff3e0; border-color: var(--gold); }
+.sol-step.s3 { background: #e3f2fd; border-color: #2196f3; }
+.sol-step.s4 { background: #fce4ec; border-color: var(--magenta); }
+.sol-step.s5 { background: #f3e5f5; border-color: var(--purple); }
+.sol-step .step-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 50%;
+  font-size: 12px; font-weight: 800; color: white;
+  margin-right: 6px; vertical-align: middle;
+}
+.s1 .step-num { background: var(--green); }
+.s2 .step-num { background: var(--gold); }
+.s3 .step-num { background: #2196f3; }
+.s4 .step-num { background: var(--magenta); }
+.s5 .step-num { background: var(--purple); }
+.math-line {
+  font-family: 'JetBrains Mono', monospace; font-size: 14px;
+  font-weight: 600; color: var(--text);
+  background: rgba(255,255,255,0.7); padding: 5px 12px;
+  border-radius: 7px; margin: 6px 0; display: inline-block;
+}
+.math-line .ans {
+  color: var(--magenta); font-weight: 800;
+  text-decoration: underline; text-decoration-color: var(--gold);
+  text-underline-offset: 3px;
+}
+
+/* ===== ANSWER INPUT ===== */
+.answer-section {
+  display: flex; align-items: center; gap: 10px;
+  margin-top: 18px; padding: 14px 18px;
+  background: #f8f9fc; border-radius: var(--radius-sm); flex-wrap: wrap;
+}
+.answer-section label { font-weight: 700; font-size: 14px; }
+.answer-input {
+  padding: 9px 14px; border: 2px solid #d0d5dd;
+  border-radius: 9px; font-family: 'JetBrains Mono', monospace;
+  font-size: 15px; font-weight: 600; width: 140px; outline: none;
+  transition: border-color 0.2s;
+}
+.answer-input:focus { border-color: var(--teal); }
+.answer-input.correct { border-color: var(--green); background: #e8f5e9; }
+.answer-input.wrong { border-color: var(--red); background: #ffebee; }
+.check-btn {
+  padding: 9px 20px; border: none; border-radius: 9px;
+  font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800;
+  cursor: pointer; background: var(--teal); color: white; transition: all 0.2s;
+}
+.check-btn:hover { background: var(--teal-dark); }
+.answer-feedback { font-weight: 700; font-size: 13px; display: none; }
+.answer-feedback.show { display: inline-flex; align-items: center; gap: 5px; }
+.answer-feedback.correct { color: var(--green); }
+.answer-feedback.wrong { color: var(--red); }
+
+/* ===== FINAL ANSWER ===== */
+.final-answer {
+  display: none; background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+  border: 2px solid var(--green); border-radius: var(--radius-sm);
+  padding: 14px 22px; margin-top: 14px;
+  font-size: 16px; font-weight: 800;
+  font-family: 'Fredoka', sans-serif; color: var(--green-dark); text-align: center;
+}
+.final-answer.show { display: block; }
+
+/* ===== TABS ===== */
+.tab-bar {
+  display: flex; gap: 4px; margin-bottom: 20px;
+  background: #f0f2f5; padding: 4px; border-radius: 12px; width: fit-content;
+}
+.tab-btn {
+  padding: 8px 20px; border: none; border-radius: 10px;
+  font-family: 'Nunito', sans-serif; font-size: 13px;
+  font-weight: 700; cursor: pointer; transition: all 0.2s;
+  background: transparent; color: var(--text-light);
+}
+.tab-btn.active {
+  background: white; color: var(--magenta);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.tab-content { display: none; animation: fadeSlideIn 0.3s ease; }
+.tab-content.active { display: block; }
+
+/* ===== WELCOME ===== */
+.welcome-hero {
+  background: linear-gradient(135deg, var(--magenta-bg), #f0e8ff, var(--teal-bg));
+  border-radius: var(--radius); padding: 36px 32px;
+  text-align: center; margin-bottom: 24px; position: relative; overflow: hidden;
+}
+.welcome-hero h1 {
+  font-family: 'Fredoka', sans-serif; font-size: 30px;
+  color: var(--text); position: relative; z-index: 1; margin-bottom: 6px;
+}
+.welcome-hero p { font-size: 15px; color: var(--text-light); position: relative; z-index: 1; }
+.concept-card {
+  background: linear-gradient(135deg, #fff5f8, #f8f0ff, #f0f8ff);
+  border: 2px solid #e8d0f0; border-radius: var(--radius); padding: 28px; margin-bottom: 20px;
+}
+.concept-card h3 {
+  font-family: 'Fredoka', sans-serif; font-size: 17px;
+  color: var(--purple); margin-bottom: 14px;
+}
+.criteria {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 10px; margin-top: 10px;
+}
+.criteria-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 12px 14px; background: white; border-radius: 10px;
+  font-size: 13px; line-height: 1.5; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.criteria-icon {
+  width: 30px; height: 30px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; flex-shrink: 0;
+}
+
+/* ===== NAV BUTTONS ===== */
+.nav-buttons {
+  display: flex; justify-content: space-between;
+  margin-top: 24px; padding-top: 18px; border-top: 2px solid #eef1f5;
+}
+.nav-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 11px 24px; border: none; border-radius: 11px;
+  font-family: 'Nunito', sans-serif; font-size: 14px;
+  font-weight: 700; cursor: pointer; transition: all 0.2s;
+}
+.nav-btn.prev { background: #f0f2f5; color: var(--text); }
+.nav-btn.prev:hover { background: #e0e4e8; }
+.nav-btn.next {
+  background: linear-gradient(135deg, var(--magenta), var(--magenta-dark));
+  color: white; box-shadow: 0 3px 10px rgba(230,0,126,0.25);
+}
+.nav-btn.next:hover { transform: translateY(-2px); }
+
+/* ===== SCORE ===== */
+.score-badge {
+  position: fixed; bottom: 20px; right: 20px;
+  background: white; border-radius: 14px;
+  padding: 10px 18px; box-shadow: var(--shadow-lg);
+  display: flex; align-items: center; gap: 8px; z-index: 99;
+  border: 2px solid var(--gold-light);
+}
+.score-badge .star { font-size: 22px; }
+.score-badge .score-text {
+  font-family: 'Fredoka', sans-serif; font-size: 16px; font-weight: 700;
+}
+.score-badge .score-text em { color: var(--magenta); font-style: normal; }
+
+/* ===== PROMO GRID ===== */
+.promo-grid { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; padding: 10px; }
+.promo-item {
+  width: 32px; height: 32px; border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 800; color: white;
+}
+.promo-item.paid { background: var(--teal); }
+.promo-item.free { background: var(--green); }
+.promo-item.half { background: var(--gold); color: var(--text); }
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5); z-index: 200;
+  align-items: center; justify-content: center;
+  backdrop-filter: blur(4px);
+}
+.modal-overlay.show { display: flex; }
+.modal {
+  background: white; border-radius: var(--radius);
+  padding: 32px; max-width: 480px; width: 90%;
+  box-shadow: var(--shadow-lg); animation: modalPop 0.3s ease;
+}
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.9) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.modal h2 { font-family: 'Fredoka', sans-serif; font-size: 22px; color: var(--text); margin-bottom: 8px; }
+.modal p { font-size: 14px; color: var(--text-light); margin-bottom: 20px; line-height: 1.6; }
+.modal-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.modal-option {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 18px; border: 2px solid #e8ecf0;
+  border-radius: 12px; cursor: pointer; transition: all 0.2s;
+}
+.modal-option:hover { border-color: var(--teal); background: var(--teal-bg); }
+.modal-option.selected { border-color: var(--magenta); background: var(--magenta-bg); }
+.modal-option input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--magenta); }
+.modal-option label { cursor: pointer; font-weight: 600; font-size: 14px; }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+.modal-btn {
+  padding: 10px 24px; border: none; border-radius: 10px;
+  font-family: 'Nunito', sans-serif; font-size: 14px;
+  font-weight: 700; cursor: pointer; transition: all 0.2s;
+}
+.modal-btn.cancel { background: #f0f2f5; color: var(--text); }
+.modal-btn.confirm {
+  background: linear-gradient(135deg, var(--magenta), var(--magenta-dark));
+  color: white; box-shadow: 0 3px 10px rgba(230,0,126,0.25);
+}
+.modal-btn.confirm:hover { transform: translateY(-1px); }
+.generating-indicator {
+  display: none; align-items: center; gap: 10px;
+  padding: 14px; background: var(--teal-bg); border-radius: 10px; margin-top: 12px;
+  font-weight: 700; color: var(--teal-dark); font-size: 14px;
+}
+.generating-indicator.show { display: flex; }
+.spinner {
+  width: 20px; height: 20px; border: 3px solid var(--teal-light);
+  border-top-color: var(--teal); border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .main-content { padding: 16px 14px; }
+  .header-badge { display: none; }
+  .q-card { padding: 18px; }
+}
+.shake { animation: shake 0.5s ease; }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="logo-area">
+      <div class="logo-icon">P</div>
+      <div class="logo-text"><h1>POLYMATH</h1><span>Learning Centre</span></div>
+    </div>
+    <div class="header-actions">
+      <div class="header-badge">P5 Math &middot; Grouping Concept</div>
+      <button class="export-btn" onclick="openExportModal()">&#128196; Export PDF</button>
+    </div>
+  </div>
+  <div class="progress-bar-container"><div class="progress-bar-fill" id="progressBar"></div></div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar"></nav>
+  <main class="main-content" id="mainContent"></main>
+</div>
+
+<div class="score-badge">
+  <div class="star">&#11088;</div>
+  <div class="score-text"><em id="scoreVal">0</em> / 38</div>
+</div>
+
+<div class="modal-overlay" id="exportModal">
+  <div class="modal">
+    <h2>&#128196; Export PDF Worksheet</h2>
+    <p>Generate a printable PDF worksheet with alternate questions and answer key for your students.</p>
+    <div class="modal-options">
+      <div class="modal-option selected" onclick="toggleOpt(this,'altQ')">
+        <input type="checkbox" checked><label>Alternate Questions (19 new questions)</label>
+      </div>
+      <div class="modal-option selected" onclick="toggleOpt(this,'ansKey')">
+        <input type="checkbox" checked><label>Answer Key with Step-by-Step Solutions</label>
+      </div>
+      <div class="modal-option" onclick="toggleOpt(this,'origQ')">
+        <input type="checkbox"><label>Include Original Questions Too</label>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" onclick="closeExportModal()">Cancel</button>
+      <button class="modal-btn confirm" id="genBtn" onclick="generatePDF()">Generate PDF</button>
+    </div>
+    <div class="generating-indicator" id="genInd">
+      <div class="spinner"></div><span>Generating PDF...</span>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ==========================================================
+   ALL QUESTION DATA — PRE-COMPUTED WITH VERIFIED MATH
+   ========================================================== */
+
+var ORIG = [
+  {n:1, title:"Fried Rice & Duck Rice", tag:"excess",
+   text:"Mr Shen sells a plate of fried rice for $2.60 and a plate of duck rice for $3.30. He sold 19 more plates of fried rice than duck rice on Saturday. He collected $320.80 in total. How many plates of fried rice did he sell?",
+   answer:65, ansNum:65,
+   steps:["Remove excess fried rice: $2.60 x 19 = $49.40","Adjusted total: $320.80 - $49.40 = $271.40","1 group: $2.60 + $3.30 = $5.90","Groups (= duck rice): $271.40 / $5.90 = 46","Fried rice: 46 + 19 = 65"]},
+
+  {n:2, title:"Coin Bag Fractions", tag:"grouping",
+   text:"A bag has 20-cent, 50-cent, and $1 coins. 1/5 are 20-cent. 1/2 of the remainder are 50-cent, rest are $1. Total value $252.80. (a) Fraction of $1 coins? (b) Total coins?",
+   answer:"(a) 2/5  (b) 395", ansNum:395,
+   steps:["Fractions: 20c=1/5, 50c=2/5, $1=2/5. Ratio 1:2:2","(a) $1 coins = 2/5","1 group (5 coins): $0.20 + $1.00 + $2.00 = $3.20","Groups: $252.80 / $3.20 = 79","(b) Total: 5 x 79 = 395"]},
+
+  {n:3, title:"Pizza Promotion", tag:"promo",
+   text:"For every 2 pizzas purchased, 1 pizza is free. Each pizza costs $20. Shaun wanted to buy 30 pizzas but is short of $15. How much money does Shaun have?",
+   answer:385, ansNum:385,
+   steps:["30 / 3 = 10 groups (2 paid + 1 free)","Cost per group: $20 x 2 = $40","Total cost: $40 x 10 = $400","Shaun's money: $400 - $15 = $385"]},
+
+  {n:4, title:"Cake Bakery Promotion", tag:"promo",
+   text:"For every 3 log cakes bought, the 4th cake is at half price. Each cake costs $14.60. Most cakes John can buy with $276?",
+   answer:21, ansNum:21,
+   steps:["1 group: $14.60 x 3 + $7.30 = $51.10","$276 / $51.10 = 5 groups R $20.50","Extra: $20.50 / $14.60 = 1 cake","Total: 5 x 4 + 1 = 21"]},
+
+  {n:5, title:"Sugar & Cocoa Powder", tag:"grouping",
+   text:"Sugar costs $2.50. Cocoa costs $4 more. May bought thrice as many sugar as cocoa. Paid $546. How many packets of sugar?",
+   answer:117, ansNum:117,
+   steps:["Cocoa: $2.50 + $4 = $6.50","1 group (3 sugar + 1 cocoa): $7.50 + $6.50 = $14","Groups: $546 / $14 = 39","Sugar: 3 x 39 = 117"]},
+
+  {n:6, title:"Basketball Tickets", tag:"promo",
+   text:"Ticket is $27. Every 5 purchased, 1 free. Total cost for 124 people?",
+   answer:2808, ansNum:2808,
+   steps:["6 per group: 124 / 6 = 20 R 4","20 groups: $27 x 5 x 20 = $2,700","Remaining 4: $27 x 4 = $108","Total: $2,700 + $108 = $2,808"]},
+
+  {n:7, title:"Tomatoes & Broccoli", tag:"excess",
+   text:"Noel bought tomatoes ($4/bag) and broccolis ($6 more) for $168. 7 more bags of tomatoes. (a) Tomato bags? (b) Tomato cost?",
+   answer:"(a) 17  (b) $68", ansNum:17,
+   steps:["Broccoli: $10. Remove excess: $4 x 7 = $28","Adjusted: $168 - $28 = $140","1 group: $4 + $10 = $14","Groups: $140 / $14 = 10","(a) Tomatoes: 10 + 7 = 17  (b) $4 x 17 = $68"]},
+
+  {n:8, title:"Cheese & Egg Tarts", tag:"grouping",
+   text:"Egg tart $1.20, cheese tart $1.80. Thrice as many cheese as egg. Spent $125.40. How many cheese tarts?",
+   answer:57, ansNum:57,
+   steps:["1 group (1 egg + 3 cheese): $1.20 + $5.40 = $6.60","Groups: $125.40 / $6.60 = 19","Cheese: 19 x 3 = 57"]},
+
+  {n:9, title:"Vanilla & Lemon Cupcakes", tag:"excess",
+   text:"Sold 15 more lemon than vanilla. Vanilla $1.80, lemon $1.60. Total $442.20. How much from lemon cupcakes?",
+   answer:"$220.80", ansNum:220.80,
+   steps:["Remove excess lemon: $1.60 x 15 = $24","Adjusted: $442.20 - $24 = $418.20","1 group: $1.60 + $1.80 = $3.40","Groups: $418.20 / $3.40 = 123","Lemon: 123 + 15 = 138, revenue = 138 x $1.60 = $220.80"]},
+
+  {n:10, title:"Pauline & Brother Savings", tag:"grouping",
+   text:"Pauline saves 50c/day, brother $1/day, same days. Saved $45 total. How much more did brother save?",
+   answer:"$15", ansNum:15,
+   steps:["1 day: $0.50 + $1.00 = $1.50","Days: $45 / $1.50 = 30","Diff/day: $0.50, total: $0.50 x 30 = $15"]},
+
+  {n:11, title:"Tom's Daily 50c & 20c", tag:"excess",
+   text:"Tom saved one 50c and one 20c daily. 50c coins are $36 more than 20c. How many days?",
+   answer:120, ansNum:120,
+   steps:["Diff per pair: $0.50 - $0.20 = $0.30","Days: $36 / $0.30 = 120"]},
+
+  {n:12, title:"20c & $1 Coins Difference", tag:"excess",
+   text:"3/10 are 20c coins, rest are $1. $1 coins are $217.60 more than 20c. How many 20c coins?",
+   answer:102, ansNum:102,
+   steps:["Ratio 3:7","1 group diff: $1 x 7 - $0.20 x 3 = $7 - $0.60 = $6.40","Groups: $217.60 / $6.40 = 34","20c coins: 3 x 34 = 102"]},
+
+  {n:13, title:"Victor's Piggy Bank", tag:"excess",
+   text:"Victor has $27 with 20c and 50c coins. 5 more 50c than 20c. How many 20c coins?",
+   answer:35, ansNum:35,
+   steps:["Remove excess 50c: $0.50 x 5 = $2.50","Adjusted: $27 - $2.50 = $24.50","1 group: $0.50 + $0.20 = $0.70","20c coins: $24.50 / $0.70 = 35"]},
+
+  {n:14, title:"Pencils for Students", tag:"grouping",
+   text:"3/7 are girls. Each girl 2 pencils, each boy 3 pencils. 90 pencils total. How many students?",
+   answer:35, ansNum:35,
+   steps:["Ratio G:B = 3:4","1 group: 2x3 + 3x4 = 6 + 12 = 18","Groups: 90 / 18 = 5","Students: 7 x 5 = 35"]},
+
+  {n:15, title:"Balloons at Carnival", tag:"grouping",
+   text:"3/5 are boys. Each boy 3 balloons, each girl 4. Total 17. How many boys?",
+   answer:3, ansNum:3,
+   steps:["Ratio B:G = 3:2","1 group: 3x3 + 4x2 = 9 + 8 = 17","Groups: 17 / 17 = 1","Boys: 3 x 1 = 3"]},
+
+  {n:16, title:"Soft Toys & Keychains", tag:"excess",
+   text:"Spent $382.20 on soft toys ($14.70) and keychains ($4.90). 6 more keychains than soft toys. How many keychains?",
+   answer:24, ansNum:24,
+   steps:["Remove excess keychains: $4.90 x 6 = $29.40","Adjusted: $382.20 - $29.40 = $352.80","1 group: $14.70 + $4.90 = $19.60","Groups: $352.80 / $19.60 = 18","Keychains: 18 + 6 = 24"]},
+
+  {n:17, title:"$1 & 20c Fraction", tag:"excess",
+   text:"25 more 20c coins than $1 coins. Value difference is $51. Express $1 coins as fraction of 20c coins.",
+   answer:"14/19", ansNum:0,
+   steps:["Remove 25 extra 20c: 25 x $0.20 = $5","New diff: $51 + $5 = $56","Diff/pair: $1 - $0.20 = $0.80","$1 coins: $56 / $0.80 = 70","20c coins: 70 + 25 = 95","Fraction: 70/95 = 14/19"]},
+
+  {n:18, title:"Tom 50c & 20c Excess", tag:"excess",
+   text:"50c coins are $18.50 more than 20c coins. 5 more 20c than 50c. How many 50c coins?",
+   answer:65, ansNum:65,
+   steps:["Remove 5 extra 20c: 5 x $0.20 = $1","New diff: $18.50 + $1 = $19.50","Diff/pair: $0.50 - $0.20 = $0.30","50c coins: $19.50 / $0.30 = 65"]},
+
+  {n:19, title:"Choc & Sweets (Hard)", tag:"excess",
+   text:"Ratio choc:sweets = 2:7. Each choc $1.70 more than sweet. Paid $299.60. Sweets cost $92.40 more than choc. Total items?",
+   answer:126, ansNum:126,
+   steps:["Choc total: ($299.60 - $92.40) / 2 = $103.60","Sweets total: $103.60 + $92.40 = $196","1 unit choc: $103.60 / 2 = $51.80","1 unit sweets: $196 / 7 = $28","Diff: $51.80 - $28 = $23.80","Items/unit: $23.80 / $1.70 = 14","Total: 9 x 14 = 126"]}
+];
+
+/*
+  ALTERNATE QUESTIONS — All math verified:
+  Q1: noodle=40, chicken=40+18=58, pA=3.50, pB=2.50
+      total = 58*3.50 + 40*2.50 = 203+100 = 303
+  Q2: ratio 2:3, 20c:$1. group=2*0.20+3*1.00=3.40
+      50 groups => 250 coins, value=170
+  Q3: buy 3 free 1. price=15. want=40 => 10 groups. cost=450. short $20 => 430
+  Q4: buy 4, 5th half. price=12. budget=280. group=54. 5 groups=270. R10. 0 extra. total=25
+  Q5: flour $3, butter $8. 2 flour per 1 butter. group=14. 33 groups=462. flour=66
+  Q6: ticket $32. buy 4 free 1. 90 people. 90/5=18 groups. cost=18*4*32=2304
+  Q7: apples $3, oranges $8. 9 more apples. nO=15,nA=24. total=72+120=192
+  Q8: muffin $1.40, scone $2.10. 4x scones. group=1.40+8.40=9.80. 15 groups=147. scones=60
+  Q9: choc muffin $2.40, straw $1.80. 20 more choc. nS=100,nC=120. total=288+180=468. choc rev=288
+  Q10: Ming 80c, sister 40c. total $36. days=30. diff=12
+  Q11: $1 and 50c daily. diff $45. pair diff $0.50. days=90
+  Q12: 50c:$2 = 1:4. group diff = 8-0.50 = 7.50. total diff = 300. groups=40. 50c coins=40
+  Q13: n20=45, extra=8, n50=53. total=9+26.50=35.50. remove excess: 35.50-4=31.50. 31.50/0.70=45
+  Q14: G:B=2:7. girls 5 stickers, boys 3. group=10+21=31. 7 groups=217. students=63
+  Q15: G:B=3:4. girls 2, boys 5. group=6+20=26. 2 groups=52. girls=6
+  Q16: notebook $8.50, pen $3.50. 10 more pens. nN=30,nP=40. total=255+140=395
+  Q17: 30 more 50c than $2. n2=60,n50=90. val diff=120-45=75. remove 30*0.50=15. new=90. 90/1.50=60. frac=60/90=2/3
+  Q18: $1 coins $25.80 more than 20c. 3 more 20c. n1=33,n20=36. remove 3*0.20=0.60. new=26.40. 26.40/0.80=33
+  Q19: books:pens=2:5. book $1.20 more. total $252. books $36 more. booksT=144, pensT=108. unitB=72, unitP=21.60. diff=50.40. items/unit=42. total=294
+*/
+
+var ALT = [
+  {n:1, title:"Chicken Rice & Noodles", tag:"excess",
+   text:"Mrs Lee sells a plate of chicken rice for $3.50 and a plate of noodles for $2.50. She sold 18 more plates of chicken rice than noodles. She collected $303 in total. How many plates of chicken rice did she sell?",
+   answer:58, ansLabel:"58 plates",
+   steps:["Remove excess chicken rice: $3.50 x 18 = $63","Adjusted total: $303 - $63 = $240","1 group: $3.50 + $2.50 = $6","Groups (= noodles): $240 / $6 = 40","Chicken rice: 40 + 18 = 58"]},
+
+  {n:2, title:"Coin Jar (20c & $1)", tag:"grouping",
+   text:"A jar contains 20-cent coins and $1 coins. 2/5 of the coins are 20-cent coins and the rest are $1 coins. The total value of the coins is $170. How many coins are there altogether?",
+   answer:250, ansLabel:"250 coins",
+   steps:["Ratio 20c : $1 = 2 : 3","1 group (5 coins): $0.20 x 2 + $1 x 3 = $0.40 + $3 = $3.40","Groups: $170 / $3.40 = 50","Total coins: 5 x 50 = 250"]},
+
+  {n:3, title:"Burger Promotion", tag:"promo",
+   text:"A restaurant promotion: for every 3 burgers purchased, 1 burger is free. Each burger costs $15. Damien wanted to buy 40 burgers but is short of $20. How much money does Damien have?",
+   answer:430, ansLabel:"$430",
+   steps:["Groups: 40 / 4 = 10 groups (3 paid + 1 free)","Cost per group: $15 x 3 = $45","Total cost: $45 x 10 = $450","Damien's money: $450 - $20 = $430"]},
+
+  {n:4, title:"Muffin Bakery Promotion", tag:"promo",
+   text:"A bakery promotion: for every 4 muffins bought, the 5th muffin is at half price. Each muffin costs $12. What is the most number of muffins Sarah can buy if she has $280?",
+   answer:25, ansLabel:"25 muffins",
+   steps:["1 group (4 full + 1 half): $12 x 4 + $6 = $54","Full groups: $280 / $54 = 5 R $10","Extra: $10 / $12 = 0 muffins","Total: 5 x 5 + 0 = 25"]},
+
+  {n:5, title:"Flour & Butter", tag:"grouping",
+   text:"A packet of flour costs $3. A packet of butter costs $5 more. James bought twice as many packets of flour as butter. He paid $462 in total. How many packets of flour did James buy?",
+   answer:66, ansLabel:"66 packets",
+   steps:["Butter: $3 + $5 = $8","1 group (2 flour + 1 butter): $3 x 2 + $8 = $14","Groups: $462 / $14 = 33","Flour: 2 x 33 = 66"]},
+
+  {n:6, title:"Concert Tickets", tag:"promo",
+   text:"A concert ticket costs $32. For every 4 tickets purchased, 1 additional ticket is given free. Find the total cost of tickets for a group of 90 people.",
+   answer:2304, ansLabel:"$2,304",
+   steps:["5 per group (4 paid + 1 free): 90 / 5 = 18 groups","Cost per group: $32 x 4 = $128","Total: $128 x 18 = $2,304"]},
+
+  {n:7, title:"Apples & Oranges", tag:"excess",
+   text:"Rachel bought bags of apples ($3 each) and oranges ($5 more each) for $192. She bought 9 more bags of apples than oranges. (a) Apple bags? (b) Apple cost?",
+   answer:"(a) 24  (b) $72", ansLabel:"(a) 24 bags  (b) $72",
+   steps:["Orange: $3 + $5 = $8","Remove excess apples: $3 x 9 = $27","Adjusted: $192 - $27 = $165","1 group: $3 + $8 = $11","Groups: $165 / $11 = 15","(a) Apples: 15 + 9 = 24  (b) $3 x 24 = $72"]},
+
+  {n:8, title:"Muffins & Scones", tag:"grouping",
+   text:"Each muffin costs $1.40 and each scone costs $2.10. Wendy bought 4 times as many scones as muffins and spent $147. How many scones did she buy?",
+   answer:60, ansLabel:"60 scones",
+   steps:["1 group (1 muffin + 4 scones): $1.40 + $2.10 x 4 = $1.40 + $8.40 = $9.80","Groups: $147 / $9.80 = 15","Scones: 4 x 15 = 60"]},
+
+  {n:9, title:"Chocolate & Strawberry Muffins", tag:"excess",
+   text:"A baker sold 20 more chocolate muffins than strawberry muffins. Each chocolate muffin was $2.40 and each strawberry was $1.80. He collected $468 total. How much from chocolate muffins?",
+   answer:"$288", ansLabel:"$288",
+   steps:["Remove excess chocolate: $2.40 x 20 = $48","Adjusted: $468 - $48 = $420","1 group: $2.40 + $1.80 = $4.20","Groups: $420 / $4.20 = 100","Chocolate: 100 + 20 = 120","Revenue: 120 x $2.40 = $288"]},
+
+  {n:10, title:"Ming & Sister Savings", tag:"grouping",
+   text:"Ming saved 80 cents per day and his sister saved 40 cents per day. They saved for the same number of days. If they saved $36 altogether, how much more did Ming save than his sister?",
+   answer:"$12", ansLabel:"$12",
+   steps:["1 day: $0.80 + $0.40 = $1.20","Days: $36 / $1.20 = 30","Diff/day: $0.40","Total diff: $0.40 x 30 = $12"]},
+
+  {n:11, title:"Andy's Daily $1 & 50c", tag:"excess",
+   text:"Andy saved one $1 coin and one 50-cent coin in his piggy bank every day. After several days, the $1 coins are $45 more than the 50-cent coins. How many days did Andy save for?",
+   answer:90, ansLabel:"90 days",
+   steps:["Diff per pair: $1.00 - $0.50 = $0.50","Days: $45 / $0.50 = 90"]},
+
+  {n:12, title:"50c & $2 Coins Difference", tag:"excess",
+   text:"There are some 50-cent coins and $2 coins in a bag. 1/5 of the coins are 50-cent coins while the rest are $2 coins. The total value of the $2 coins is $300 more than the 50-cent coins. How many 50-cent coins are there?",
+   answer:40, ansLabel:"40 coins",
+   steps:["Ratio 50c : $2 = 1 : 4","1 group diff: $2 x 4 - $0.50 x 1 = $8 - $0.50 = $7.50","Groups: $300 / $7.50 = 40","50c coins: 1 x 40 = 40"]},
+
+  {n:13, title:"Linda's Piggy Bank", tag:"excess",
+   text:"Linda has $35.50 in her piggy bank with 20-cent and 50-cent coins. There are 8 more 50-cent coins than 20-cent coins. How many 20-cent coins are there?",
+   answer:45, ansLabel:"45 coins",
+   steps:["Remove excess 50c: $0.50 x 8 = $4","Adjusted: $35.50 - $4 = $31.50","1 group: $0.50 + $0.20 = $0.70","20c coins: $31.50 / $0.70 = 45"]},
+
+  {n:14, title:"Stickers for Students", tag:"grouping",
+   text:"In a class, 2/9 of the students are girls. Mrs Tan gave each girl 5 stickers and each boy 3 stickers. She gave out 217 stickers. How many students are there?",
+   answer:63, ansLabel:"63 students",
+   steps:["Ratio G:B = 2:7","1 group: 5 x 2 + 3 x 7 = 10 + 21 = 31","Groups: 217 / 31 = 7","Students: 9 x 7 = 63"]},
+
+  {n:15, title:"Erasers at Sports Day", tag:"grouping",
+   text:"At a sports day, 3/7 of the children are girls. Each girl received 2 erasers and each boy received 5 erasers. A total of 52 erasers were given out. How many girls are there?",
+   answer:6, ansLabel:"6 girls",
+   steps:["Ratio G:B = 3:4","1 group: 2 x 3 + 5 x 4 = 6 + 20 = 26","Groups: 52 / 26 = 2","Girls: 3 x 2 = 6"]},
+
+  {n:16, title:"Notebooks & Pens", tag:"excess",
+   text:"Uncle Ben spent $395 on some notebooks and pens. He bought 10 more pens than notebooks. A notebook costs $8.50 and a pen costs $3.50. How many pens did Uncle Ben buy?",
+   answer:40, ansLabel:"40 pens",
+   steps:["Remove excess pens: $3.50 x 10 = $35","Adjusted: $395 - $35 = $360","1 group: $8.50 + $3.50 = $12","Groups: $360 / $12 = 30","Pens: 30 + 10 = 40"]},
+
+  {n:17, title:"$2 & 50c Coins Fraction", tag:"excess",
+   text:"There are 30 more 50-cent coins than $2 coins in a box. The difference in value between all the $2 coins and all the 50-cent coins is $75. Express the number of $2 coins as a fraction of the number of 50-cent coins.",
+   answer:"2/3", ansLabel:"60/90 = 2/3",
+   steps:["Remove excess 50c: 30 x $0.50 = $15","New diff: $75 + $15 = $90","Diff/pair: $2 - $0.50 = $1.50","$2 coins: $90 / $1.50 = 60","50c coins: 60 + 30 = 90","Fraction: 60/90 = 2/3"]},
+
+  {n:18, title:"Amy's $1 & 20c (Excess)", tag:"excess",
+   text:"Amy has some $1 coins and 20-cent coins. The $1 coins are $25.80 more than her 20-cent coins. She has 3 more 20-cent coins than $1 coins. How many $1 coins does Amy have?",
+   answer:33, ansLabel:"33 coins",
+   steps:["Remove 3 extra 20c: 3 x $0.20 = $0.60","New diff: $25.80 + $0.60 = $26.40","Diff/pair: $1.00 - $0.20 = $0.80","$1 coins: $26.40 / $0.80 = 33"]},
+
+  {n:19, title:"Books & Pens (Hard)", tag:"excess",
+   text:"The ratio of books to pens Sarah bought was 2:5. Each book costs $1.20 more than each pen. She paid $252 total. Books cost $36 more than pens total. How many books and pens altogether?",
+   answer:294, ansLabel:"294 items",
+   steps:["Books total: ($252 + $36) / 2 = $144","Pens total: ($252 - $36) / 2 = $108","1 unit books: $144 / 2 = $72","1 unit pens: $108 / 5 = $21.60","Diff/unit: $72 - $21.60 = $50.40","Items/unit: $50.40 / $1.20 = 42","Total: (2+5) x 42 = 294"]}
+];
+
+
+/* ==========================================================
+   STATE
+   ========================================================== */
+var state = {
+  page: 0,
+  score: 0,
+  completed: {},
+  stepIdx: {},
+  exportOpts: {altQ:true, ansKey:true, origQ:false}
+};
+
+/* ==========================================================
+   SIDEBAR
+   ========================================================== */
+function buildSidebar() {
+  var sb = document.getElementById('sidebar');
+  var h = '<div class="sidebar-title">Overview</div>';
+  h += navHTML(0, '&#128214;', 'Introduction');
+  h += '<div class="nav-section"><div class="sidebar-title">Questions (Orig + Alt)</div></div>';
+  for (var i = 0; i < ORIG.length; i++) {
+    h += navHTML(i + 1, String(i + 1), ORIG[i].title);
+  }
+  h += '<div class="nav-section"><div class="sidebar-title">Export</div></div>';
+  h += navHTML(ORIG.length + 1, '&#128196;', 'Export PDF');
+  sb.innerHTML = h;
+}
+
+function navHTML(idx, num, label) {
+  var cls = idx === 0 ? ' active' : '';
+  return '<div class="nav-item' + cls + '" onclick="goTo(' + idx + ')" data-idx="' + idx + '">' +
+    '<div class="nav-num">' + num + '</div>' +
+    '<div class="nav-label">' + label + '</div></div>';
+}
+
+/* ==========================================================
+   NAVIGATION
+   ========================================================== */
+function goTo(idx) {
+  state.page = idx;
+  var items = document.querySelectorAll('.nav-item');
+  for (var i = 0; i < items.length; i++) items[i].classList.remove('active');
+  var target = document.querySelector('.nav-item[data-idx="' + idx + '"]');
+  if (target) { target.classList.add('active'); target.scrollIntoView({block:'nearest',behavior:'smooth'}); }
+
+  var main = document.getElementById('mainContent');
+  main.innerHTML = '<div class="question-page active">' + renderPage(idx) + '</div>';
+  var total = ORIG.length + 2;
+  document.getElementById('progressBar').style.width = ((idx + 1) / total * 100) + '%';
+  main.scrollTop = 0;
+}
+
+function renderPage(idx) {
+  if (idx === 0) return introHTML();
+  if (idx === ORIG.length + 1) return exportPageHTML();
+  return questionPairHTML(idx - 1);
+}
+
+/* ==========================================================
+   INTRO
+   ========================================================== */
+function introHTML() {
+  return '<div class="welcome-hero">' +
+    '<h1>&#129518; Grouping Concept</h1>' +
+    '<p>Primary 5 Math &mdash; January Worksheet 2 &mdash; With Alternate Questions &amp; PDF Export</p></div>' +
+    '<div class="concept-card"><h3>How do you identify a Grouping question?</h3>' +
+    '<div class="criteria">' +
+    '<div class="criteria-item"><div class="criteria-icon" style="background:var(--teal-bg)">&#128290;</div>' +
+    '<div><strong>Two types of objects</strong> with a proportion given (ratio, &ldquo;twice as many&rdquo;, &ldquo;N more&rdquo;)</div></div>' +
+    '<div class="criteria-item"><div class="criteria-icon" style="background:var(--magenta-bg)">&#128176;</div>' +
+    '<div><strong>Different values</strong> for each type ($2 vs $5, 50&cent; vs 20&cent;)</div></div>' +
+    '<div class="criteria-item"><div class="criteria-icon" style="background:var(--gold-light)">&#128202;</div>' +
+    '<div><strong>Total or Difference</strong> in value is given ($341 total, $36 more)</div></div></div></div>' +
+    '<div class="q-card"><h3 style="font-family:Fredoka,sans-serif;color:var(--purple);margin-bottom:14px;">Three Sub-Types</h3>' +
+    '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;">' +
+    '<div style="background:var(--teal-bg);padding:18px;border-radius:12px;border-left:4px solid var(--teal);">' +
+    '<strong style="color:var(--teal-dark);">Basic Grouping</strong><p style="font-size:12px;margin-top:6px;color:var(--text-light);">Ratio + total value &rarr; form groups &rarr; find items.</p></div>' +
+    '<div style="background:#f3e5f5;padding:18px;border-radius:12px;border-left:4px solid var(--purple);">' +
+    '<strong style="color:var(--purple);">Remove Excess</strong><p style="font-size:12px;margin-top:6px;color:var(--text-light);">Unequal quantities &rarr; remove extra items first, then group 1:1.</p></div>' +
+    '<div style="background:var(--gold-light);padding:18px;border-radius:12px;border-left:4px solid var(--gold);">' +
+    '<strong style="color:#e65100;">Promotions</strong><p style="font-size:12px;margin-top:6px;color:var(--text-light);">Buy X get Y free/half price &rarr; form paid+free groups.</p></div></div></div>' +
+    '<div class="q-card" style="text-align:center;">' +
+    '<p style="font-size:15px;margin-bottom:14px;color:var(--text-light);"><strong>19 original</strong> + <strong>19 alternate</strong> questions with solutions and <strong>PDF export</strong>.</p>' +
+    '<button class="step-btn primary" onclick="goTo(1)" style="font-size:15px;padding:12px 32px;">Start Learning &rarr;</button>' +
+    ' <button class="export-btn" onclick="openExportModal()" style="display:inline-flex;font-size:14px;padding:12px 24px;margin-left:8px;">&#128196; Export PDF</button></div>' +
+    navBtnsHTML(0);
+}
+
+/* ==========================================================
+   EXPORT PAGE
+   ========================================================== */
+function exportPageHTML() {
+  return '<div class="q-card" style="text-align:center;padding:40px;">' +
+    '<h2 style="font-family:Fredoka,sans-serif;font-size:24px;margin-bottom:12px;">&#128196; Export PDF Worksheet</h2>' +
+    '<p style="color:var(--text-light);margin-bottom:24px;max-width:500px;margin-left:auto;margin-right:auto;">' +
+    'Generate a printable PDF with all 19 alternate questions as a worksheet for your students, complete with an answer key showing step-by-step solutions.</p>' +
+    '<button class="step-btn primary" onclick="openExportModal()" style="font-size:16px;padding:14px 36px;">&#128196; Generate PDF Worksheet</button></div>';
+}
+
+/* ==========================================================
+   QUESTION PAIR (ORIG + ALT)
+   ========================================================== */
+function questionPairHTML(qi) {
+  var o = ORIG[qi];
+  var a = ALT[qi];
+  var tagCls = o.tag === 'grouping' ? 'grouping' : o.tag === 'excess' ? 'excess' : 'promo';
+  var tagLabel = o.tag === 'grouping' ? 'Grouping' : o.tag === 'excess' ? 'Remove Excess' : 'Promotion';
+
+  var html = '<div class="tab-bar">' +
+    '<button class="tab-btn active" onclick="switchTab(' + qi + ',\'orig\',this)">&#128221; Original Q' + o.n + '</button>' +
+    '<button class="tab-btn" onclick="switchTab(' + qi + ',\'alt\',this)">&#128260; Alternate Q' + a.n + '</button></div>';
+
+  // ORIGINAL TAB
+  html += '<div class="tab-content active" id="tab-orig-' + qi + '">';
+  html += questionCardHTML(o, qi, 'orig', 'practice', tagCls, tagLabel);
+  html += '</div>';
+
+  // ALT TAB
+  html += '<div class="tab-content" id="tab-alt-' + qi + '">';
+  html += questionCardHTML(a, qi, 'alt', 'alt', 'alt-tag', tagLabel + ' (Alt)');
+  html += '</div>';
+
+  html += navBtnsHTML(qi + 1);
+  return html;
+}
+
+function questionCardHTML(q, qi, prefix, numCls, tagCls, tagLabel) {
+  var label = prefix === 'orig' ? 'Q' + q.n : 'A' + q.n;
+  var boxCls = prefix === 'alt' ? ' alt-box' : '';
+  var icon = prefix === 'alt' ? '&#128260;' : '&#128221;';
+  var nSteps = q.steps.length;
+  var ansText = q.ansLabel || String(q.answer);
+
+  var h = '<div class="q-card"><div class="q-header">' +
+    '<div class="q-number ' + numCls + '">' + label + '</div>' +
+    '<div class="q-title-area"><h2>' + q.title + '</h2>' +
+    '<span class="q-type ' + tagCls + '">' + tagLabel + '</span></div></div>';
+
+  h += '<div class="problem-box' + boxCls + '" data-icon="' + icon + '">' + q.text + '</div>';
+
+  // Visualization for some questions
+  h += buildViz(q, qi, prefix);
+
+  // Steps
+  h += '<div class="steps-area"><div class="controls-bar">' +
+    '<button class="step-btn primary" onclick="revealStep(\'' + prefix + '-' + qi + '\',' + nSteps + ')">Show Next Step &#9654;</button>' +
+    '<button class="step-btn secondary" onclick="revealAll(\'' + prefix + '-' + qi + '\',' + nSteps + ')">Show All</button>' +
+    '<button class="step-btn reset" onclick="resetSteps(\'' + prefix + '-' + qi + '\',' + nSteps + ')">&#8634; Reset</button></div>';
+
+  h += '<div class="solution-steps" id="steps-' + prefix + '-' + qi + '">';
+  for (var i = 0; i < nSteps; i++) {
+    var sc = 's' + ((i % 5) + 1);
+    h += '<div class="sol-step ' + sc + '" id="step-' + prefix + '-' + qi + '-' + i + '">' +
+      '<span class="step-num">' + (i + 1) + '</span> ' + q.steps[i] + '</div>';
+  }
+  h += '</div>';
+
+  h += '<div class="final-answer" id="answer-' + prefix + '-' + qi + '">' +
+    '&#9989; Answer: <span style="font-size:22px;color:var(--magenta);display:block;margin-top:3px;">' + ansText + '</span></div>';
+  h += '</div>';
+
+  // Answer input
+  var checkVal = q.ansNum !== undefined ? q.ansNum : q.answer;
+  h += '<div class="answer-section"><label>Your Answer:</label>' +
+    '<input type="text" class="answer-input" id="input-' + prefix + '-' + qi + '" placeholder="Enter answer" ' +
+    'onkeydown="if(event.key===\'Enter\')checkAns(\'' + prefix + '\',' + qi + ')">' +
+    '<button class="check-btn" onclick="checkAns(\'' + prefix + '\',' + qi + ')">Check &#10003;</button>' +
+    '<span class="answer-feedback" id="fb-' + prefix + '-' + qi + '"></span></div>';
+
+  h += '</div>';
+  return h;
+}
+
+function buildViz(q, qi, prefix) {
+  // Bar visualisation for key questions
+  var h = '<div class="viz-area"><div class="viz-title">&#128202; Visual Representation</div>';
+
+  if (q.tag === 'promo') {
+    // Show promo groupings
+    var emoji = '&#127829;'; // pizza
+    if (q.title.indexOf('Burger') >= 0) emoji = '&#127828;';
+    if (q.title.indexOf('Muffin') >= 0 || q.title.indexOf('Cake') >= 0) emoji = '&#127856;';
+    if (q.title.indexOf('Ticket') >= 0 || q.title.indexOf('Concert') >= 0) emoji = '&#127915;';
+    h += '<div style="text-align:center;padding:8px;color:var(--text-light);font-size:13px;">' +
+      'Paid items ' + emoji + ' are grouped with free/discounted items to form cost groups.</div>';
+  } else if (q.tag === 'excess') {
+    h += '<div class="bar-viz">';
+    h += '<div class="bar-row"><div class="bar-label">Item A (more)</div>' +
+      '<div class="bar-track"><div class="bar-fill type-a" style="width:65%;">Higher count</div></div></div>';
+    h += '<div class="bar-row"><div class="bar-label">Item B</div>' +
+      '<div class="bar-track"><div class="bar-fill type-b" style="width:48%;">Lower count</div></div></div>';
+    h += '<div class="bar-row"><div class="bar-label" style="color:var(--red);">Excess</div>' +
+      '<div class="bar-track"><div class="bar-fill" style="width:17%;background:var(--red);opacity:0.7;">Remove</div></div></div>';
+    h += '</div>';
+    h += '<div style="text-align:center;font-size:12px;color:var(--text-light);padding:4px;">Remove excess items &rarr; make quantities equal &rarr; group 1:1</div>';
+  } else {
+    h += '<div class="bar-viz">';
+    h += '<div class="bar-row"><div class="bar-label">Type A</div>' +
+      '<div class="bar-track"><div class="bar-fill type-a" style="width:40%;">Ratio portion</div></div></div>';
+    h += '<div class="bar-row"><div class="bar-label">Type B</div>' +
+      '<div class="bar-track"><div class="bar-fill type-b" style="width:60%;">Ratio portion</div></div></div>';
+    h += '<div class="bar-row"><div class="bar-label">Group Total</div>' +
+      '<div class="bar-track"><div class="bar-fill total-bar" style="width:100%;">Combined value</div></div></div>';
+    h += '</div>';
+    h += '<div style="text-align:center;font-size:12px;color:var(--text-light);padding:4px;">Form groups by ratio &rarr; divide total by group value</div>';
+  }
+
+  h += '</div>';
+  return h;
+}
+
+function navBtnsHTML(idx) {
+  var maxIdx = ORIG.length + 1;
+  var prevD = idx === 0 ? ' disabled style="opacity:0.3;pointer-events:none;"' : '';
+  var nextD = idx >= maxIdx ? ' disabled style="opacity:0.3;pointer-events:none;"' : '';
+  return '<div class="nav-buttons">' +
+    '<button class="nav-btn prev" onclick="goTo(' + (idx - 1) + ')"' + prevD + '>&larr; Previous</button>' +
+    '<button class="nav-btn next" onclick="goTo(' + (idx + 1) + ')"' + nextD + '>Next &rarr;</button></div>';
+}
+
+/* ==========================================================
+   TABS
+   ========================================================== */
+function switchTab(qi, which, btn) {
+  var parent = btn.parentElement;
+  var btns = parent.querySelectorAll('.tab-btn');
+  for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
+  btn.classList.add('active');
+
+  var origTab = document.getElementById('tab-orig-' + qi);
+  var altTab = document.getElementById('tab-alt-' + qi);
+  if (origTab) origTab.classList.toggle('active', which === 'orig');
+  if (altTab) altTab.classList.toggle('active', which === 'alt');
+}
+
+/* ==========================================================
+   STEP-BY-STEP
+   ========================================================== */
+function revealStep(key, total) {
+  if (!state.stepIdx[key]) state.stepIdx[key] = 0;
+  if (state.stepIdx[key] >= total) return;
+  var el = document.getElementById('step-' + key + '-' + state.stepIdx[key]);
+  if (el) el.classList.add('visible');
+  state.stepIdx[key]++;
+  if (state.stepIdx[key] >= total) {
+    var ans = document.getElementById('answer-' + key);
+    if (ans) ans.classList.add('show');
+  }
+}
+
+function revealAll(key, total) {
+  for (var i = 0; i < total; i++) {
+    var el = document.getElementById('step-' + key + '-' + i);
+    if (el) el.classList.add('visible');
+  }
+  state.stepIdx[key] = total;
+  var ans = document.getElementById('answer-' + key);
+  if (ans) ans.classList.add('show');
+}
+
+function resetSteps(key, total) {
+  state.stepIdx[key] = 0;
+  for (var i = 0; i < total; i++) {
+    var el = document.getElementById('step-' + key + '-' + i);
+    if (el) el.classList.remove('visible');
+  }
+  var ans = document.getElementById('answer-' + key);
+  if (ans) ans.classList.remove('show');
+}
+
+/* ==========================================================
+   ANSWER CHECK
+   ========================================================== */
+function checkAns(prefix, qi) {
+  var q = prefix === 'orig' ? ORIG[qi] : ALT[qi];
+  var input = document.getElementById('input-' + prefix + '-' + qi);
+  var fb = document.getElementById('fb-' + prefix + '-' + qi);
+  if (!input || !fb) return;
+
+  var uv = input.value.trim().replace(/\$/g, '').replace(/,/g, '');
+  var correct = false;
+
+  // Check against answer string
+  var expected = String(q.answer).replace(/\$/g, '');
+  if (uv === expected) correct = true;
+
+  // Check ansNum
+  if (q.ansNum !== undefined && q.ansNum !== 0) {
+    if (Math.abs(parseFloat(uv) - q.ansNum) < 0.02) correct = true;
+  }
+
+  // Check ansLabel
+  if (q.ansLabel) {
+    var clean = q.ansLabel.replace(/\$/g,'').replace(/,/g,'').replace(/\s+/g,'');
+    if (uv.replace(/\s+/g,'') === clean) correct = true;
+  }
+
+  // For fractions
+  if (String(q.answer).indexOf('/') >= 0 && uv === String(q.answer)) correct = true;
+
+  input.className = 'answer-input ' + (correct ? 'correct' : 'wrong');
+  fb.className = 'answer-feedback show ' + (correct ? 'correct' : 'wrong');
+  fb.innerHTML = correct ? '&#9989; Correct!' : '&#10060; Try again!';
+
+  var ck = prefix + '-' + qi;
+  if (correct && !state.completed[ck]) {
+    state.completed[ck] = true;
+    state.score++;
+    document.getElementById('scoreVal').textContent = state.score;
+    var navItem = document.querySelector('.nav-item[data-idx="' + (qi + 1) + '"]');
+    if (navItem) navItem.classList.add('completed');
+  }
+
+  if (!correct) {
+    input.classList.add('shake');
+    setTimeout(function() { input.classList.remove('shake'); }, 500);
+  }
+}
+
+/* ==========================================================
+   EXPORT MODAL
+   ========================================================== */
+function openExportModal() {
+  document.getElementById('exportModal').classList.add('show');
+}
+
+function closeExportModal() {
+  document.getElementById('exportModal').classList.remove('show');
+}
+
+function toggleOpt(el, key) {
+  state.exportOpts[key] = !state.exportOpts[key];
+  el.classList.toggle('selected', state.exportOpts[key]);
+  el.querySelector('input').checked = state.exportOpts[key];
+}
+
+/* ==========================================================
+   PDF GENERATION
+   ========================================================== */
+function generatePDF() {
+  var jsPDF = window.jspdf.jsPDF;
+  var ind = document.getElementById('genInd');
+  var btn = document.getElementById('genBtn');
+  ind.classList.add('show');
+  btn.disabled = true;
+
+  setTimeout(function() {
+    try {
+      var doc = new jsPDF('p', 'mm', 'a4');
+      var W = 210, H = 297, M = 18;
+      var CW = W - 2 * M;
+      var y = 0;
+
+      // ===== COVER =====
+      doc.setFillColor(230, 0, 126);
+      doc.rect(0, 0, W, 45, 'F');
+      doc.setFillColor(0, 180, 216);
+      doc.triangle(0, H, 55, H, 0, H - 55, 'F');
+      doc.setFillColor(123, 45, 142);
+      doc.triangle(W, H, W - 45, H, W, H - 45, 'F');
+
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(14);
+      doc.setFont('helvetica', 'bold');
+      doc.text('POLYMATH LEARNING CENTRE', W / 2, 25, {align: 'center'});
+
+      doc.setTextColor(44, 62, 80);
+      doc.setFontSize(26);
+      doc.text('Primary 5 Math', W / 2, 80, {align: 'center'});
+
+      doc.setFontSize(18);
+      doc.setTextColor(230, 0, 126);
+      doc.text('Grouping Concept', W / 2, 95, {align: 'center'});
+      doc.text('Practice Worksheet', W / 2, 107, {align: 'center'});
+
+      doc.setFontSize(12);
+      doc.setTextColor(100, 100, 100);
+      doc.text('Name: ________________________________', M, 145);
+      doc.text('Date: ________________________________', M, 160);
+      doc.text('Score: _________ / 19', M, 175);
+
+      // ===== ALTERNATE QUESTIONS =====
+      if (state.exportOpts.altQ) {
+        doc.addPage();
+        y = sectionHeader(doc, 'Practice Questions (Alternate)', M, W);
+
+        for (var i = 0; i < ALT.length; i++) {
+          if (y > H - 55) { doc.addPage(); y = M + 5; }
+          y = drawQ(doc, i + 1, ALT[i].text, y, M, CW);
+        }
+      }
+
+      // ===== ORIGINAL QUESTIONS =====
+      if (state.exportOpts.origQ) {
+        doc.addPage();
+        y = sectionHeader(doc, 'Original Questions', M, W);
+
+        for (var i = 0; i < ORIG.length; i++) {
+          if (y > H - 55) { doc.addPage(); y = M + 5; }
+          y = drawQ(doc, i + 1, ORIG[i].text, y, M, CW);
+        }
+      }
+
+      // ===== ANSWER KEY =====
+      if (state.exportOpts.ansKey) {
+        // Alt answer key
+        if (state.exportOpts.altQ) {
+          doc.addPage();
+          y = sectionHeader(doc, 'Answer Key - Alternate Questions', M, W);
+          for (var i = 0; i < ALT.length; i++) {
+            if (y > H - 55) { doc.addPage(); y = M + 5; }
+            y = drawAnsKey(doc, i + 1, ALT[i], y, M, CW, H);
+          }
+        }
+
+        // Orig answer key
+        if (state.exportOpts.origQ) {
+          doc.addPage();
+          y = sectionHeader(doc, 'Answer Key - Original Questions', M, W);
+          for (var i = 0; i < ORIG.length; i++) {
+            if (y > H - 55) { doc.addPage(); y = M + 5; }
+            y = drawAnsKey(doc, i + 1, ORIG[i], y, M, CW, H);
+          }
+        }
+      }
+
+      // ===== PAGE NUMBERS =====
+      var totalP = doc.internal.getNumberOfPages();
+      for (var p = 1; p <= totalP; p++) {
+        doc.setPage(p);
+        doc.setFontSize(8);
+        doc.setTextColor(180, 180, 180);
+        doc.text('Polymath Learning Centre | P5 Math Grouping Concept | Page ' + p + '/' + totalP, W / 2, H - 8, {align: 'center'});
+      }
+
+      doc.save('P5_Math_Grouping_Alternate_Worksheet.pdf');
+
+    } catch (e) {
+      console.error('PDF error:', e);
+      alert('Error generating PDF. Please try again.');
+    }
+
+    ind.classList.remove('show');
+    btn.disabled = false;
+    closeExportModal();
+  }, 200);
+}
+
+function sectionHeader(doc, title, M, W) {
+  doc.setFillColor(230, 0, 126);
+  doc.rect(M, 14, W - 2 * M, 12, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(13);
+  doc.setFont('helvetica', 'bold');
+  doc.text(title, W / 2, 22, {align: 'center'});
+  return 36;
+}
+
+function drawQ(doc, num, text, y, M, CW) {
+  // Number circle
+  doc.setFillColor(230, 0, 126);
+  doc.circle(M + 5, y, 3.5, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'bold');
+  doc.text(String(num), M + 5, y + 1, {align: 'center'});
+
+  // Text
+  doc.setTextColor(44, 62, 80);
+  doc.setFontSize(10.5);
+  doc.setFont('helvetica', 'normal');
+  var lines = doc.splitTextToSize(text, CW - 16);
+  doc.text(lines, M + 12, y + 1);
+  y += lines.length * 5 + 4;
+
+  // Answer line
+  doc.setFontSize(9);
+  doc.setTextColor(150, 150, 150);
+  doc.text('Ans: ________________', M + 12, y);
+  y += 12;
+  return y;
+}
+
+function drawAnsKey(doc, num, q, y, M, CW, H) {
+  var ansText = q.ansLabel || String(q.answer);
+
+  doc.setFontSize(10.5);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(230, 0, 126);
+  doc.text('Q' + num + '. ' + q.title, M, y);
+  y += 5.5;
+
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(39, 174, 96);
+  doc.text('Answer: ' + ansText, M + 4, y);
+  y += 5;
+
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(44, 62, 80);
+  doc.setFontSize(9);
+
+  for (var j = 0; j < q.steps.length; j++) {
+    if (y > H - 15) { doc.addPage(); y = M + 5; }
+    var sl = doc.splitTextToSize('Step ' + (j + 1) + ': ' + q.steps[j], CW - 10);
+    doc.text(sl, M + 4, y);
+    y += sl.length * 4.2 + 1;
+  }
+
+  // Separator
+  y += 2;
+  doc.setDrawColor(220, 220, 220);
+  doc.line(M, y, M + CW, y);
+  y += 5;
+  return y;
+}
+
+/* ==========================================================
+   INIT
+   ========================================================== */
+buildSidebar();
+goTo(0);
+
+</script>
+</body>
+</html>
