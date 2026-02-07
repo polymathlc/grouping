@@ -1152,19 +1152,19 @@ function pdfDrawLineWithFracs(doc, line, x, y, color) {
     var m = part.match(/^(\d+)\/(\d+)$/);
     if (m) {
       var num = m[1], den = m[2];
-      var fracSize = baseFontSize * 0.65;
+      var fracSize = baseFontSize * 0.85;
       doc.setFontSize(fracSize);
       var numW = doc.getTextWidth(num);
       var denW = doc.getTextWidth(den);
-      var fracW = Math.max(numW, denW) + 1.5;
+      var fracW = Math.max(numW, denW) + 3;
       var cx = curX + fracW / 2;
-      doc.text(num, cx, y - 1.4, {align:'center'});
+      doc.text(num, cx, y - 1.8, {align:'center'});
       doc.setDrawColor(color[0], color[1], color[2]);
-      doc.setLineWidth(0.25);
-      doc.line(curX + 0.2, y - 0.4, curX + fracW - 0.2, y - 0.4);
-      doc.text(den, cx, y + 1.2, {align:'center'});
+      doc.setLineWidth(0.3);
+      doc.line(curX + 0.3, y - 0.3, curX + fracW - 0.3, y - 0.3);
+      doc.text(den, cx, y + 1.8, {align:'center'});
       doc.setFontSize(baseFontSize);
-      curX += fracW + 0.5;
+      curX += fracW + 1;
     } else {
       doc.text(part, curX, y);
       curX += doc.getTextWidth(part);
